@@ -13,7 +13,7 @@ var client = new Twitter({
 // console.log(client);
 
 //variable to contain particular action for switch
-var action = process.argv[2];
+// var action = process.argv[2];
 inquirer.prompt([
 	 {
 	 	type: "list",
