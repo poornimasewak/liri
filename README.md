@@ -6,4 +6,12 @@ Spotify
 OMDB
 Request
 Fs
-fff
+Inquirer
+Created a keys.js file to hold exports for twitter 	
+Check for arguments	Liri should check for the following arguments using inquirer npm package: my-tweets, spotify-this-song, movie-this, do-what-it-says	
+my-tweets	Shows last 20 tweets	
+spotify-this-song	Display artist, song name, preview link, album name
+movie-this	Return title, year, IMDB rating, country, language, plot, actors, rating, rating URL	
+do-what-it-says	This will run the first command in the txt file	
+
+
