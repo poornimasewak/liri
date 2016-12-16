@@ -107,7 +107,7 @@ function myTweets() {
     client.get('statuses/user_timeline', params, function(error, tweets, response) {
         if (error) throw error;
         // Loop through to get top 20 tweets.
-        for (var i = 0; i < tweets.length; i++) {
+        for (var i = 0; i < 20; i++) {
         	var k = i+1;
             console.log(k+". Tweets : " + tweets[i].quoted_status.text + "\n"+ k +". Created at : " + tweets[i].quoted_status.created_at);
         }
