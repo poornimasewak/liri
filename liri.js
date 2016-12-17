@@ -13,6 +13,7 @@ var action = process.argv[2];
 var searchInput = process.argv[3];
 
 //switch statement
+function mySwitch(action, searchInput){
 switch (action) {
     case 'movie-this':
         omdbMovie(searchInput);
@@ -30,8 +31,11 @@ switch (action) {
         doWhatItSays();
         break;
 
-}
+    default :  console.log("You haven't choose any option. Try again !!!" );
 
+}
+}
+mySwitch(action, searchInput);
 
 // function to create movie information entered by the user 
 function omdbMovie(movieName) {
@@ -129,15 +133,16 @@ function doWhatItSays() {
         // define an array variable an put split data in it
         var dataArr = data.split(',');
         // calling spotify function to display random.txt info
-        if (dataArr[0] === 'spotify-this-song') {
-            spotifySong(dataArr[1]);
-        } else if (dataArr[0] === 'my-tweets') {
-            myTweets();
-        } else if (dataArr[0] === 'movie-this') {
-            omdbMovie(dataArr[1]);
-        } else {
-            console.log('File is empty.');
-        }
+        // if (dataArr[0] === 'spotify-this-song') {
+        //     spotifySong(dataArr[1]);
+        // } else if (dataArr[0] === 'my-tweets') {
+        //     myTweets();
+        // } else if (dataArr[0] === 'movie-this') {
+        //     omdbMovie(dataArr[1]);
+        // } else {
+        //     console.log('File is empty.');
+        // }
+        mySwitch(dataArr[0], dataArr[1]);
     });
 
 }
