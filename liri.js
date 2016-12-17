@@ -1,7 +1,6 @@
 var request = require('request');
 var keys = require('./keys.js');
 var Twitter = require('twitter');
-var inquirer = require('inquirer');
 var spotify = require('spotify');
 var fs = require('fs');
 var client = new Twitter({
@@ -10,31 +9,13 @@ var client = new Twitter({
     access_token_key: keys.twitterKeys.access_token_key,
     access_token_secret: keys.twitterKeys.access_token_secret
 });
+var action = process.argv[2];
+var searchInput = process.argv[3];
 
-inquirer.prompt([{
-    type: "list",
-    message: "What you want to display",
-    choices: ["my-tweets", "movie-this", "spotify-this-song", "do-what-it-says"],
-    name: "action"
-}, {
-    type: "input",
-    message: "Search for ... : ",
-    name: "searchInput"
-}, {
-    type: "confirm",
-    message: "Are you sure:",
-    name: "confirm",
-    default: true
-
-}]).then(function(user) {
-
-    // If the user confirms. 
-    if (user.confirm) {
-
-        //switch statement
-        switch (user.action) {
+//switch statement
+        switch (action) {
             case 'movie-this':
-                omdbMovie(user.searchInput);
+                omdbMovie(searchInput);
                 break;
 
             case 'my-tweets':
@@ -42,7 +23,7 @@ inquirer.prompt([{
                 break;
 
             case 'spotify-this-song':
-                spotifySong(user.searchInput);
+                spotifySong(searchInput);
                 break;
 
             case 'do-what-it-says':
@@ -50,22 +31,20 @@ inquirer.prompt([{
                 break;
 
         }
-    } else {
-        console.log('Try again with Options.');
-    }
-});
-
-
 
 
 // function to create movie information entered by the user 
 function omdbMovie(movieName) {
-    // storing arguments in an array
-    // var nodeArgs = process.argv;
-
+    
+    // Default value for movieName
+    if (movieName === undefined) {
+        movieName = "Mr. Nobody";
+    }
     // empty variable for holding movie name
     var movieName = movieName;
 
+    // storing arguments in an array
+    // var nodeArgs = process.argv;    
     // loop through all the words in nodeArgs
     // for (var i = 3; i < nodeArgs.length; i++) {
     // 	if(i > 3 && i < nodeArgs.length) {
@@ -75,14 +54,10 @@ function omdbMovie(movieName) {
     // 		movieName += nodeArgs[i];
     // 	}
     // }
-
-    // Default value for movieName
-    if (movieName === '') {
-        movieName = "Mr. Nobody"
-    }
-
+ 
     var queryUrl = "http://www.omdbapi.com/?t=" + movieName + "&y=&plot=short&tomatoes=true&r=json";
 
+    // request npm package sends the queryUrl and call back function returns the data called by the API.
     request(queryUrl, function(error, response, body) {
 
         if (!error && response.statusCode === 200) {
@@ -104,7 +79,9 @@ function myTweets() {
     var params = {
         screen_name: 'poornima sewak'
     };
+    // Client get method send the user's tweets request and recieve the tweets in a call back function.
     client.get('statuses/user_timeline', params, function(error, tweets, response) {
+    	// if there is an error then throw an exception.
         if (error) throw error;
         // Loop through to get top 20 tweets.
         for (var i = 0; i < 20; i++) {
@@ -119,10 +96,10 @@ function spotifySong(songTitle) {
 
     var song = songTitle;
     // If user entered nothing then 'The Sign' is the song title spotify look for to get data
-    if (song === '') {
+    if (song === undefined) {
         song = 'The Sign';
     }
-
+    // Spotify API call for data for a query and its type. In this case its a track and song.
     spotify.search({
         type: 'track',
         query: song
@@ -150,8 +127,19 @@ function doWhatItSays() {
     fs.readFile('random.txt', 'utf8', function(err, data) {
         // define an array variable an put split data in it
         var dataArr = data.split(',');
-        // calling spotify function to display song info
+        // calling spotify function to display random.txt info
+        if(dataArr[0] === 'spotify-this-song'){
         spotifySong(dataArr[1]);
+        }
+        else if(dataArr[0] === 'my-tweets'){
+        	myTweets();
+             }
+             else if (dataArr[0] === 'movie-this'){
+             	omdbMovie(dataArr[1]);
+             }
+             else{
+             	console.log('File is empty.');
+             }
     });
 
 }
