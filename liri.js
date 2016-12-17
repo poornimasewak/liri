@@ -13,29 +13,29 @@ var action = process.argv[2];
 var searchInput = process.argv[3];
 
 //switch statement
-        switch (action) {
-            case 'movie-this':
-                omdbMovie(searchInput);
-                break;
+switch (action) {
+    case 'movie-this':
+        omdbMovie(searchInput);
+        break;
 
-            case 'my-tweets':
-                myTweets();
-                break;
+    case 'my-tweets':
+        myTweets();
+        break;
 
-            case 'spotify-this-song':
-                spotifySong(searchInput);
-                break;
+    case 'spotify-this-song':
+        spotifySong(searchInput);
+        break;
 
-            case 'do-what-it-says':
-                doWhatItSays();
-                break;
+    case 'do-what-it-says':
+        doWhatItSays();
+        break;
 
-        }
+}
 
 
 // function to create movie information entered by the user 
 function omdbMovie(movieName) {
-    
+
     // Default value for movieName
     if (movieName === undefined) {
         movieName = "Mr. Nobody";
@@ -54,7 +54,7 @@ function omdbMovie(movieName) {
     // 		movieName += nodeArgs[i];
     // 	}
     // }
- 
+
     var queryUrl = "http://www.omdbapi.com/?t=" + movieName + "&y=&plot=short&tomatoes=true&r=json";
 
     // request npm package sends the queryUrl and call back function returns the data called by the API.
@@ -77,16 +77,17 @@ function omdbMovie(movieName) {
 function myTweets() {
     // sets screen_name to fix value.
     var params = {
-        screen_name: 'poornima sewak'
+        screen_name: 'poornima_sewak'
     };
     // Client get method send the user's tweets request and recieve the tweets in a call back function.
     client.get('statuses/user_timeline', params, function(error, tweets, response) {
-    	// if there is an error then throw an exception.
+        // if there is an error then throw an exception.
         if (error) throw error;
+        console.log(tweets);
         // Loop through to get top 20 tweets.
         for (var i = 0; i < 20; i++) {
-        	var k = i+1;
-            console.log(k+". Tweets : " + tweets[i].quoted_status.text + "\n"+ k +". Created at : " + tweets[i].quoted_status.created_at);
+            var k = i + 1;
+            console.log(k + ". Tweets : " + tweets[i].text + "\n" + k + ". Created at : " + tweets[i].created_at);
         }
     });
 }
@@ -128,18 +129,15 @@ function doWhatItSays() {
         // define an array variable an put split data in it
         var dataArr = data.split(',');
         // calling spotify function to display random.txt info
-        if(dataArr[0] === 'spotify-this-song'){
-        spotifySong(dataArr[1]);
+        if (dataArr[0] === 'spotify-this-song') {
+            spotifySong(dataArr[1]);
+        } else if (dataArr[0] === 'my-tweets') {
+            myTweets();
+        } else if (dataArr[0] === 'movie-this') {
+            omdbMovie(dataArr[1]);
+        } else {
+            console.log('File is empty.');
         }
-        else if(dataArr[0] === 'my-tweets'){
-        	myTweets();
-             }
-             else if (dataArr[0] === 'movie-this'){
-             	omdbMovie(dataArr[1]);
-             }
-             else{
-             	console.log('File is empty.');
-             }
     });
 
 }
